@@ -1,6 +1,6 @@
 Dynatrace-ActiveGate-Ansible
 =========
-# NOTE: TO BE UPDATED
+### NOTE: TO BE UPDATED
 
 Ansible role to install/update/uninstall Dynatrace ActiveGate on Linux and Windows Operating Systems.
 
