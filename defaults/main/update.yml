@@ -1,0 +1,3 @@
+---
+# Set the ActiveGate version to update to / latest
+dynatrace_activegate_version: latest

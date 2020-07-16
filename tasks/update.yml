@@ -1,0 +1,5 @@
+---
+#latest version downloaded in tasks/main.yml
+- name: update dynatrace activegate | linux
+  command: "{{dynatrace_activegate_install_cmd}}"
+  when: ansible_system|lower == "linux"

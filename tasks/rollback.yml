@@ -1,0 +1,18 @@
+- name: load uninstall vars
+  include_vars: "defaults/main/uninstall.yml"
+
+- name: load install vars
+  include_vars: "defaults/main/install.yml"
+
+# Checks if downgrade version exists else downloads it
+- name: call download task | download installer if not present locally
+  include_tasks: "tasks/download.yml"
+
+# NOTE: Config backup not taken as this is not relevant for re-installs
+#       Install parameters to be specified in tasks/install.yml
+
+- name: Uninstall existing AG
+  include_tasks: "tasks/uninstall.yml"
+
+- name: Install old AG version
+  include_tasks: "tasks/install.yml"

@@ -1,0 +1,16 @@
+---
+- name: uninstall dynatrace activegate | linux
+  command: "{{dynatrace_activegate_uninstall_cmd}}"
+  when: ansible_system|lower=="linux"
+
+- name: Clean folders
+  file:
+    state: absent
+    path: "{{item}}"
+  with_items:
+    - "{{dynatrace_activegate_install_dir}}"
+    - "{{dynatrace_activegate_log_dir}}"
+    - "{{dynatrace_activegate_config_dir}}"
+    - "{{dynatrace_activegate_packages_dir}}"
+    - "{{dynatrace_activegate_temp_dir}}"
+  when: dynatrace_activegate_cleanup_dirs == true

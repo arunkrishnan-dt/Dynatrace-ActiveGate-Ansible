@@ -1,0 +1,19 @@
+---
+# Assign function to activegate
+- name: Update ActiveGate custom.configuration file | oneagent_routing
+  blockinfile:
+    block: "{{ lookup('template', 'oneagent_routing_custom.properties.j2') }}"
+    dest: "{{dynatrace_activegate_config_dir}}/gateway/config/custom.properties"
+  when: dynatrace_activegate_function == "oneagent_routing"
+
+- name: Update ActiveGate custom.configuration file | integrations
+  blockinfile:
+    block: "{{ lookup('template', 'integrations_custom.properties.j2') }}"
+    dest: "{{dynatrace_activegate_config_dir}}/gateway/config/custom.properties"
+  when: dynatrace_activegate_function == "integrations"
+
+- name: Update ActiveGate custom.configuration file | custom
+  blockinfile:
+    block: "{{ lookup('template', 'oneagent_routing_custom.properties.j2') }}"
+    dest: "{{dynatrace_activegate_config_dir}}/gateway/config/custom_custom.properties"
+  when: dynatrace_activegate_function == "custom"

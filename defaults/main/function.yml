@@ -1,0 +1,21 @@
+---
+# activegate functions
+# enable/disable by setting true/false in playbook
+
+# OneAgent routing
+dynatrace_activegate_oneagent_routing: ""
+# DB Routing
+dynatrace_activegate_db_agent: ""
+
+# Integrations - AWS, Azure, Cloud Foundry, Kubernetes, VMWare
+dynatrace_activegate_aws: ""
+dynatrace_activegate_azure: ""
+dynatrace_activegate_cloud_foundry: ""
+dynatrace_activegate_kubernetes: ""
+dynatrace_activegate_vmware: ""
+
+# Synthetic
+dynatrace_activegate_synthetic: ""
+
+# Remote plugin module
+dynatrace_activegate_rpm: ""

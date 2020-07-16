@@ -1,0 +1,53 @@
+---
+- name: set url for latest version
+  set_fact:
+    dynatrace_activegate_installer_url: https://{{ dynatrace_environment_url }}/api/v1/deployment/installer/gateway/{{dynatrace_activegate_install_os}}/latest?arch=x86&flavor=default
+  when: dynatrace_activegate_version == 'latest'
+
+- name: set url for specific version
+  set_fact:
+    dynatrace_activegate_installer_url: https://{{ dynatrace_environment_url }}/api/v1/deployment/installer/gateway/{{dynatrace_activegate_install_os}}/version/{{dynatrace_activegate_version}}?arch=x86&flavor=default
+  when: dynatrace_activegate_version != 'latest'
+
+- name: Check if installer script exists
+  stat:
+    path: "{{dynatrace_activegate_install_script}}"
+  register: dynatrace_activegate_install_script_linux
+  when: ansible_system|lower == "linux"
+
+- name: download dynatrace activegate | linux
+  get_url:
+    url: "{{dynatrace_activegate_installer_url}}"
+    dest: "{{dynatrace_activegate_install_script}}"
+    force: yes
+    headers:
+      Authorization: "Api-Token {{dynatrace_paas_token}}"
+  when: ansible_system|lower == "linux" and not dynatrace_activegate_install_script_linux.stat.exists
+
+- name: get Dynartace CA Cert
+  get_url:
+    url: https://ca.dynatrace.com/dt-root.cert.pem
+    dest: "{{dynatrace_activegate_dt_root_cert}}"
+    force: yes
+  when: ansible_system|lower == "linux"
+
+- name: Verify installer signature
+  shell: "( echo 'Content-Type: multipart/signed; protocol=\"application/x-pkcs7-signature\"; micalg=\"sha-256\"; boundary=\"--SIGNED-INSTALLER\"'; echo ; echo ; echo '----SIGNED-INSTALLER' ; cat {{dynatrace_activegate_install_script}} ) | openssl cms -verify -CAfile {{dynatrace_activegate_dt_root_cert}} > /dev/null"
+  register: verify_signature
+  when: ansible_system|lower == "linux"
+
+- fail:
+    msg: "Installer signature check failed"
+  when: verify_signature.rc != 0 and ansible_system|lower == "linux"
+
+- name: Get downloaded AG version
+  shell: "grep SG_VERSION= {{dynatrace_activegate_install_script}} | grep -o [0-9.-]*"
+  register: activegate_version
+  when: ansible_system|lower == "linux"
+
+- name: Register downloaded AG version
+  set_fact:
+    dynatrace_activegate_version_registered: "{{activegate_version.stdout}}"
+
+- debug:
+    msg: "{{dynatrace_activegate_version_registered}}"

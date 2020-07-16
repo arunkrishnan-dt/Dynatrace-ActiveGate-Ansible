@@ -1,0 +1,141 @@
+---
+# Installer download called in tasks/main.yml
+# install vars loaded in tasks/main.yml
+- name: set install params | connection
+  set_fact:
+    activegate_install_params: "{{ activegate_install_params | default({}) | combine({item.key:item.value}) }}"
+  with_dict: "{{dynatrace_activegate_connection_args}}"
+  when: dynatrace_activegate_connection_args is defined and item.value | length > 0
+  register: activegate_install_param
+
+- name: set installer params | user
+  set_fact:
+    activegate_install_params: "{{ activegate_install_params | default({}) | combine({item.key:item.value}) }}"
+  with_items:
+    - {key: 'USER', value: "{{dynatrace_activegate_user}}"}
+  when: dynatrace_activegate_user is defined and item.value | length > 0
+  register: activegate_install_param
+
+- name: set install params | directories
+  set_fact:
+    activegate_install_params: "{{ activegate_install_params | default({}) | combine({item.key:item.value}) }}"
+  with_dict: "{{dynatrace_activegate_dir_args}}"
+  when: dynatrace_activegate_dir_args is defined and item.value | length > 0
+  register: activegate_install_param
+
+- name: set install params | Certificates
+  set_fact:
+    activegate_install_params: "{{ activegate_install_params | default({}) | combine({item.key:item.value}) }}"
+  with_dict: "{{dynatrace_activegate_certificate_args}}"
+  when: dynatrace_activegate_certificate_args is defined and item.value | length > 0
+  register: activegate_install_param
+
+- name: set proxy params | WITHOUT username & password
+  set_fact:
+    activegate_proxy_param: "{{dynatrace_activegate_proxy_args.PROXY_URL + ':' + dynatrace_activegate_proxy_args.PROXY_PORT }}"
+  when: dynatrace_activegate_proxy_args is defined and dynatrace_activegate_proxy_args.PROXY_URL | length > 0 and dynatrace_activegate_proxy_args.USERNAME | length < 1
+
+- name: set proxy params | WITH username & password
+  set_fact:
+    activegate_proxy_param: "{{ dynatrace_activegate_proxy_args.USERNAME + ':' + dynatrace_activegate_proxy_args.PASSWORD + '@' + dynatrace_activegate_proxy_args.PROXY_URL + ':' + dynatrace_activegate_proxy_args.PROXY_PORT }}"
+  when: dynatrace_activegate_proxy_args is defined and dynatrace_activegate_proxy_args.PROXY_URL | length > 0 and dynatrace_activegate_proxy_args.USERNAME | length > 1
+
+- name: set installer params | proxy
+  set_fact:
+    activegate_install_params: "{{ activegate_install_params | default({}) | combine({item.key:item.value}) }}"
+  with_items:
+    - {key: 'PROXY', value: "{{activegate_proxy_param}}"}
+  when: activegate_proxy_param is defined and item.value | length > 0
+  register: activegate_install_param
+
+- name: Create install params string
+  set_fact:
+    activegate_install_params_string: "{{ item.key }}={{ item.value }}"
+  with_dict: "{{ activegate_install_params }}"
+  register: activegate_install_params_string_fact
+  when: activegate_install_params is defined
+
+- name: set install string | with atleast one custom param
+  set_fact:
+    dynatrace_activegate_install_string: "{{dynatrace_activegate_install_cmd}} {{activegate_install_params_string_fact.results | selectattr('ansible_facts','defined') | map(attribute='ansible_facts.activegate_install_params_string') | join (' ')}}"
+  when: activegate_install_params_string is defined
+
+- name: set install string | with no custom params
+  set_fact:
+    dynatrace_activegate_install_string: "{{dynatrace_activegate_install_cmd}}"
+  when: activegate_install_params_string is not defined
+
+#####################################################
+## Install AG - non-synthetic, non-zremte(mainframe)
+####################################################
+
+- name: install dynatrace activegate | linux non-synthetic, non-zremote (mainframe)
+  command: "{{dynatrace_activegate_install_string}}"
+  args:
+    creates: "{{dynatrace_activegate_state}}"
+  when: ansible_system|lower == "linux" and dynatrace_activegate_function != 'synthetic' and dynatrace_activegate_function != 'zremote'
+
+## If installing synthetic activegate
+############################
+## synthetic AG Pre-requisites
+###########################
+
+## synthetic Ubuntu ##
+# None
+## synthetic RedHat 7 ##
+- name: Install synthetic AG | Pre-requisites | RedHat 7
+  command: "subscription-manager register --auto-attach && subscription-manager repos --enable rhel-7-server-extras-rpms && subscription-manager repos --enable rhel-7-server-optional-rpms && rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm"
+  when: ansible_system|lower == "linux" and ansible_distribution == 'RedHat' and ansible_distribution_major_version == '7' and dynatrace_activegate_function == 'synthetic'
+## synthetic RedHat 8 ##
+- name: Install synthetic AG | Pre-requisites | RedHat 8
+  command: "subscription-manager register --auto-attach && subscription-manager repos --enable rhel-8-for-x86_64-baseos-rpms && subscription-manager repos --enable rhel-8-for-x86_64-appstream-rpms && rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm"
+  when: ansible_system|lower == "linux" and ansible_distribution == 'RedHat' and ansible_distribution_major_version == '8' and dynatrace_activegate_function == 'synthetic'
+## synthetic CentOS 7  ##
+- name: Install synthetic AG | Pre-requisites | CentOS 7
+  command: "yum install epel-release -y"
+  when: ansible_system|lower == "linux" and ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7' and dynatrace_activegate_function == 'synthetic'
+
+############################
+## Install synthetic AG
+############################
+- name: Install synthetic AG
+  shell: "DYNATRACE_SYNTHETIC_AUTO_INSTALL=true {{dynatrace_activegate_install_string}} --enable-synthetic"
+  args:
+    creates: "{{dynatrace_activegate_state}}"
+  when: ansible_system|lower == "linux" and dynatrace_activegate_function == 'synthetic'
+
+############################
+## Install synthetic HTTP Only
+############################
+- name: Install synthetic AG
+  shell: "DYNATRACE_SYNTHETIC_AUTO_INSTALL=true {{dynatrace_activegate_install_string}} --enable-synthetic --disable-browser-monitors"
+  args:
+    creates: "{{dynatrace_activegate_state}}"
+  when: ansible_system|lower == "linux" and dynatrace_activegate_function == 'synthetic_http_only'
+
+
+############################
+## ZRemote - Mainframe AG ##
+############################
+- name: install dynatrace activegate | linux | zremote
+  command: "{{dynatrace_activegate_install_string}} --enable-zremote"
+  args:
+    creates: "{{dynatrace_activegate_state}}"
+  when: ansible_system|lower == "linux" and dynatrace_activegate_function == 'zremote'
+
+############################
+
+- name: stop activegate service
+  service:
+    name: dynatracegateway
+    state: stopped
+
+- name: Assign ActiveGate function | oneagent_routing/integrations/custom
+  include_tasks: "tasks/function.yml"
+  when: dynatrace_activegate_function == 'oneagent_routing' or dynatrace_activegate_function == 'integrations' or dynatrace_activegate_function == 'custom'
+
+- name: start activegate service
+  service:
+    name: dynatracegateway
+    state: started
+    enabled: yes

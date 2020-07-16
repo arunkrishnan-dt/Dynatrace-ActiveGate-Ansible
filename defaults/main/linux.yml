@@ -1,0 +1,3 @@
+---
+# set download dir
+dynatrace_activegate_download_dir: /var/tmp

@@ -1,0 +1,3 @@
+---
+#NOTE: Install directories are specified in defaults/install.yml. These directories will be used when old version is re-installed
+#NOTE: Roll back version must be specified in playbook or defauls/install.yml

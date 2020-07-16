@@ -1,0 +1,21 @@
+---
+#Specify action to perform - can be install/uninstall/update/downgrade/function
+dynatrace_activegate_role_task: ""
+
+# NOTE: Specify ActiveGate version for install/update/rollback here
+dynatrace_activegate_version: "1.191.195.20200508-085554"
+
+# Required Variables
+dynatrace_environment_url: ""
+dynatrace_paas_token: ""
+
+#_activegate connection args - leave blank to use values from installer
+dynatrace_activegate_connection_args:
+  SERVER: ""
+  DEPLOYMENT_TIER: ""
+  TENANT: ""
+  TENANT_TOKEN: ""
+
+#dynatrace_activegate_user: ""
+
+#NOTE: Parameters that can be passed only during install are in defaults/install.yml
