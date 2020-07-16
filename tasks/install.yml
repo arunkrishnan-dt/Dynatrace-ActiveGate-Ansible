@@ -1,6 +1,9 @@
 ---
 # Installer download called in tasks/main.yml
 # install vars loaded in tasks/main.yml
+# - fail:
+#     msg: "{{dynatrace_activegate_version_param}}"
+
 - name: set install params | connection
   set_fact:
     activegate_install_params: "{{ activegate_install_params | default({}) | combine({item.key:item.value}) }}"
@@ -76,9 +79,9 @@
   when: ansible_system|lower == "linux" and dynatrace_activegate_function != 'synthetic' and dynatrace_activegate_function != 'zremote'
 
 ## If installing synthetic activegate
-############################
+###############################
 ## synthetic AG Pre-requisites
-###########################
+###############################
 
 ## synthetic Ubuntu ##
 # None

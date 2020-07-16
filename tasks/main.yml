@@ -6,13 +6,10 @@
   when: not dynatrace_activegate_role_task or not dynatrace_environment_url or not dynatrace_paas_token
 
 - name: load default variables based on os
-  include_vars: "defaults/main/{{ansible_system | lower}}.yml"
+  include_vars: "defaults/{{ansible_system | lower}}.yml"
 
 - name: load variables based on os
   include_vars: "vars/{{ansible_system | lower}}.yml"
-
-- name: load variables based on task
-  include_vars: "defaults/{{dynatrace_activegate_role_task}}.yml"
 
 - name: download dynatrace activegate
   include_tasks: "tasks/download.yml"

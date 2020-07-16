@@ -1,5 +1,6 @@
 ---
 dynatrace_activegate_install_os: unix
+dynatrace_activegate_version_param: "{{dynatrace_activegate_version | default ('latest')}}"
 dynatrace_activegate_install_dir: "{{dynatrace_activegate_dir_args.INSTALL | default('/opt/dynatrace') }}"
 dynatrace_activegate_log_dir: "{{dynatrace_activegate_dir_args.LOG | default('/var/log/dynatrace')}}"
 dynatrace_activegate_config_dir: "{{dynatrace_activegate_dir_args.CONFIG | default ('/var/lib/dynatrace')}}"
@@ -7,6 +8,6 @@ dynatrace_activegate_temp_dir: "{{dynatrace_activegate_dir_args.TEMP | default('
 dynatrace_activegate_packages_dir: "{{dynatrace_activegate_dir_args.PACKAGES_DIR | default('/var/lib/dynatrace/gateway/packages')}}"
 dynatrace_activegate_dt_root_cert: "{{dynatrace_activegate_download_dir}}/dt-root.cert.pem"
 dynatrace_activegate_state: "{{dynatrace_activegate_log_dir}}/gateway/collector.state"
-dynatrace_activegate_install_script: "{{dynatrace_activegate_download_dir}}/Dynatrace-ActiveGate-{{ansible_system}}-{{dynatrace_activegate_version | default('latest')}}.sh"
+dynatrace_activegate_install_script: "{{dynatrace_activegate_download_dir}}/Dynatrace-ActiveGate-{{ansible_system}}-{{dynatrace_activegate_version_param}}.sh"
 dynatrace_activegate_install_cmd: "sh {{dynatrace_activegate_install_script}}"
 dynatrace_activegate_uninstall_cmd: "sh {{dynatrace_activegate_install_dir}}/gateway/uninstall.sh"

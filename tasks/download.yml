@@ -2,27 +2,42 @@
 - name: set url for latest version
   set_fact:
     dynatrace_activegate_installer_url: https://{{ dynatrace_environment_url }}/api/v1/deployment/installer/gateway/{{dynatrace_activegate_install_os}}/latest?arch=x86&flavor=default
-  when: dynatrace_activegate_version == 'latest'
+  when: dynatrace_activegate_version_param == 'latest'
 
 - name: set url for specific version
   set_fact:
-    dynatrace_activegate_installer_url: https://{{ dynatrace_environment_url }}/api/v1/deployment/installer/gateway/{{dynatrace_activegate_install_os}}/version/{{dynatrace_activegate_version}}?arch=x86&flavor=default
-  when: dynatrace_activegate_version != 'latest'
+    dynatrace_activegate_installer_url: https://{{ dynatrace_environment_url }}/api/v1/deployment/installer/gateway/{{dynatrace_activegate_install_os}}/version/{{dynatrace_activegate_version_param}}?arch=x86&flavor=default
+  when: dynatrace_activegate_version_param != 'latest'
 
-- name: Check if installer script exists
+# - name: Check if a 'latest' installer script exists
+#   stat:
+#     path: "{{dynatrace_activegate_download_dir}}/Dynatrace-ActiveGate-{{ansible_system}}-latest.sh"
+#   register: dynatrace_activegate_install_script_latest_linux
+#   when: ansible_system|lower == "linux"
+
+- name: Check if a installer with version number exists
   stat:
-    path: "{{dynatrace_activegate_install_script}}"
-  register: dynatrace_activegate_install_script_linux
+    path: "{{dynatrace_activegate_download_dir}}/Dynatrace-ActiveGate-{{ansible_system}}-{{dynatrace_activegate_version_param}}.sh"
+  register: dynatrace_activegate_install_script_version_linux
   when: ansible_system|lower == "linux"
 
-- name: download dynatrace activegate | linux
+- name: Download (again) 'latest' activegate installer  | linux
   get_url:
     url: "{{dynatrace_activegate_installer_url}}"
     dest: "{{dynatrace_activegate_install_script}}"
     force: yes
     headers:
       Authorization: "Api-Token {{dynatrace_paas_token}}"
-  when: ansible_system|lower == "linux" and not dynatrace_activegate_install_script_linux.stat.exists
+  when: ansible_system|lower == "linux" and dynatrace_activegate_version == 'latest'
+
+- name: Download if specified version of activegate installer not present  | linux
+  get_url:
+    url: "{{dynatrace_activegate_installer_url}}"
+    dest: "{{dynatrace_activegate_install_script}}"
+    force: yes
+    headers:
+      Authorization: "Api-Token {{dynatrace_paas_token}}"
+  when: ansible_system|lower == "linux" and dynatrace_activegate_version != 'latest' and not dynatrace_activegate_install_script_version_linux.stat.exists
 
 - name: get Dynartace CA Cert
   get_url:

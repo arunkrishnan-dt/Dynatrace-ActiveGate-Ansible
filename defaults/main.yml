@@ -1,0 +1,78 @@
+---
+# NOTE: Specify ActiveGate version for install/update/rollback here
+dynatrace_activegate_version: "latest"
+
+# Required Variables
+dynatrace_environment_url: ""
+dynatrace_paas_token: ""
+# Specify action to perform - can be install/uninstall/update/downgrade/function
+dynatrace_activegate_role_task: ""
+
+#_activegate connection args - leave blank to use values from installer
+dynatrace_activegate_connection_args:
+  SERVER: ""
+  DEPLOYMENT_TIER: ""
+  TENANT: ""
+  TENANT_TOKEN: ""
+
+# activegate user, default value is dtuserag
+dynatrace_activegate_user: ""
+
+############################
+# INSTALL PARAMS
+############################
+
+# activegate server connection time out (s) - specified as an environment variable
+dynatrace_activegate_server_connection_timeout: 120
+
+# activegate directories args
+# dynatrace_activegate_dir_args:
+#   INSTALL: ""
+#   PACKAGES_DIR: ""
+#   LOG: ""
+#   CONFIG: ""
+#   TEMP: ""
+
+#activegate proxy parameters
+dynatrace_activegate_proxy_args:
+  PROXY_URL: ""
+  PROXY_PORT: ""
+  USERNAME: ""
+  PASSWORD: ""
+
+dynatrace_activegate_certificate_args:
+  CA_CERTIFICATE_FILE: ""
+  CA_CERTIFICATE_PASSWORD: ""
+
+#activegate network zone
+dynatrace_activegate_network_zone: ""
+
+############################
+# UNINSTALL PARAMS
+############################
+dynatrace_activegate_cleanup_dirs: true
+
+############################
+# FUNCTION PARAMS
+############################
+# activegate function - default/synthetic/synthetic_http_only/zremote/oneagent_routing/integrations/custom
+dynatrace_activegate_function: "default"
+# NOTE: IF Custom modify below variables
+
+# OneAgent routing
+dynatrace_activegate_oneagent_routing: ""
+# DB Routing
+dynatrace_activegate_db_agent: ""
+
+# Integrations - AWS, Azure, Cloud Foundry, Kubernetes, VMWare
+dynatrace_activegate_aws: ""
+dynatrace_activegate_azure: ""
+dynatrace_activegate_cloud_foundry: ""
+dynatrace_activegate_kubernetes: ""
+dynatrace_activegate_vmware: ""
+
+# Synthetic
+dynatrace_activegate_synthetic: ""
+
+# Remote plugin module
+dynatrace_activegate_rpm: ""
