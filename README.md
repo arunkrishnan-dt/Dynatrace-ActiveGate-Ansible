@@ -31,6 +31,7 @@ Dependencies
 
 Example Playbook
 ----------------
+```
   ---
   - name: Install ActiveGate
     hosts: testag
@@ -43,6 +44,7 @@ Example Playbook
       dynatrace_paas_token: <your paas token>
       dynatrace_activegate_role_task: install
       dynatrace_activegate_function: "default"
+```
 
 License
 -------
