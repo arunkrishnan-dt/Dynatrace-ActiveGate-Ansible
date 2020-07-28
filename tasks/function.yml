@@ -1,5 +1,8 @@
 ---
 # Assign function to activegate
+# - fail:
+#     msg: "{{dynatrace_activegate_function}} - {{dynatrace_activegate_rpm}}"
+
 - name: Update ActiveGate custom.configuration file | oneagent_routing
   blockinfile:
     block: "{{ lookup('template', 'oneagent_routing_custom.properties.j2') }}"
@@ -14,6 +17,6 @@
 
 - name: Update ActiveGate custom.configuration file | custom
   blockinfile:
-    block: "{{ lookup('template', 'oneagent_routing_custom.properties.j2') }}"
-    dest: "{{dynatrace_activegate_config_dir}}/gateway/config/custom_custom.properties"
+    block: "{{ lookup('template', 'custom_custom.properties.j2') }}"
+    dest: "{{dynatrace_activegate_config_dir}}/gateway/config/custom.properties"
   when: dynatrace_activegate_function == "custom"

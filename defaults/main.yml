@@ -60,19 +60,19 @@ dynatrace_activegate_function: "default"
 # NOTE: IF Custom modify below variables
 
 # OneAgent routing
-dynatrace_activegate_oneagent_routing: ""
+dynatrace_activegate_oneagent_routing: "false"
 # DB Routing
-dynatrace_activegate_db_agent: ""
+dynatrace_activegate_db_agent: "false"
 
 # Integrations - AWS, Azure, Cloud Foundry, Kubernetes, VMWare
-dynatrace_activegate_aws: ""
-dynatrace_activegate_azure: ""
-dynatrace_activegate_cloud_foundry: ""
-dynatrace_activegate_kubernetes: ""
-dynatrace_activegate_vmware: ""
+dynatrace_activegate_aws: "false"
+dynatrace_activegate_azure: "false"
+dynatrace_activegate_cloud_foundry: "false"
+dynatrace_activegate_kubernetes: "false"
+dynatrace_activegate_vmware: "false"
 
 # Synthetic
-dynatrace_activegate_synthetic: ""
+dynatrace_activegate_synthetic: "false"
 
 # Remote plugin module
-dynatrace_activegate_rpm: ""
+dynatrace_activegate_rpm: "false"
