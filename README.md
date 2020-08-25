@@ -1,8 +1,17 @@
 Dynatrace-ActiveGate-Ansible
-=========
-### NOTE: TO BE UPDATED
+================
 
-Ansible role to install/update/uninstall Dynatrace ActiveGate on Linux and Windows Operating Systems.
+### Note: Documentation in Progress
+
+Ansible role to install/update/rollback/uninstall ActiveGate on Linux
+
+Use this role to install default & Custom AGs that focus on specific functions
+1. Default AG
+2. OneAgent Routing AG - OneAgent traffic routing & DB plugins only
+3. Integrations AG - AWS, Azure, Cloud Foundry, Kubernetes, VMWare integrations
+4. Synthetic AG - Synthetic Monitoring - Browser & HTTP Monitoring
+5. Synthetic HTTP Only - Synthetic Monitoring - HTTP Monitoring Only
+6. Custom AG - Specify custom functions eg: Plugin Module
 
 Note: This role is based on Dynatrace [Dynatrace-OneAgent-Ansible](https://github.com/Dynatrace/Dynatrace-OneAgent-Ansible) role
 
