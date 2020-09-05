@@ -5,6 +5,13 @@
     msg: "One or more required Variables are not defined"
   when: not dynatrace_activegate_role_task or not dynatrace_environment_url or not dynatrace_paas_token
 
+- debug:
+    msg: "{{dynatrace_activegate_role_task}} running on {{ansible_host}}. Hit Cntrl+C now to cancel if incorrect"
+
+- name: "wait for 15 seconds"
+  wait_for:
+    timeout: 15   
+
 - name: load default variables based on os
   include_vars: "defaults/{{ansible_system | lower}}.yml"
 

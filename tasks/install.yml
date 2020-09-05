@@ -68,14 +68,17 @@
     dynatrace_activegate_install_string: "{{dynatrace_activegate_install_cmd}}"
   when: activegate_install_params_string is not defined
 
+- debug:
+    msg: "Install String: {{ dynatrace_activegate_install_string}}"
+
 #####################################################
 ## Install AG - non-synthetic, non-zremte(mainframe)
 ####################################################
 
 - name: install dynatrace activegate | linux non-synthetic, non-zremote (mainframe)
   command: "{{dynatrace_activegate_install_string}}"
-  args:
-    creates: "{{dynatrace_activegate_state}}"
+  # args:
+  #   creates: "{{dynatrace_activegate_state}}"
   when: ansible_system|lower == "linux" and dynatrace_activegate_function != 'synthetic' and dynatrace_activegate_function != 'zremote'
 
 ## If installing synthetic activegate
@@ -103,8 +106,8 @@
 ############################
 - name: Install synthetic AG
   shell: "DYNATRACE_SYNTHETIC_AUTO_INSTALL=true {{dynatrace_activegate_install_string}} --enable-synthetic"
-  args:
-    creates: "{{dynatrace_activegate_state}}"
+  # args:
+  #   creates: "{{dynatrace_activegate_state}}"
   when: ansible_system|lower == "linux" and dynatrace_activegate_function == 'synthetic'
 
 ############################
@@ -112,18 +115,17 @@
 ############################
 - name: Install synthetic AG
   shell: "DYNATRACE_SYNTHETIC_AUTO_INSTALL=true {{dynatrace_activegate_install_string}} --enable-synthetic --disable-browser-monitors"
-  args:
-    creates: "{{dynatrace_activegate_state}}"
+  # args:
+  #   creates: "{{dynatrace_activegate_state}}"
   when: ansible_system|lower == "linux" and dynatrace_activegate_function == 'synthetic_http_only'
-
 
 ############################
 ## ZRemote - Mainframe AG ##
 ############################
 - name: install dynatrace activegate | linux | zremote
   command: "{{dynatrace_activegate_install_string}} --enable-zremote"
-  args:
-    creates: "{{dynatrace_activegate_state}}"
+  # args:
+  #   creates: "{{dynatrace_activegate_state}}"
   when: ansible_system|lower == "linux" and dynatrace_activegate_function == 'zremote'
 
 ############################

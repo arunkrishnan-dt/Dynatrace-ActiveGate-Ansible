@@ -9,13 +9,7 @@
     dynatrace_activegate_installer_url: https://{{ dynatrace_environment_url }}/api/v1/deployment/installer/gateway/{{dynatrace_activegate_install_os}}/version/{{dynatrace_activegate_version_param}}?arch=x86&flavor=default
   when: dynatrace_activegate_version_param != 'latest'
 
-# - name: Check if a 'latest' installer script exists
-#   stat:
-#     path: "{{dynatrace_activegate_download_dir}}/Dynatrace-ActiveGate-{{ansible_system}}-latest.sh"
-#   register: dynatrace_activegate_install_script_latest_linux
-#   when: ansible_system|lower == "linux"
-
-- name: Check if a installer with version number exists
+- name: Check if an installer with specified version number exists
   stat:
     path: "{{dynatrace_activegate_download_dir}}/Dynatrace-ActiveGate-{{ansible_system}}-{{dynatrace_activegate_version_param}}.sh"
   register: dynatrace_activegate_install_script_version_linux
