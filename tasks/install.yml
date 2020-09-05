@@ -79,7 +79,7 @@
   command: "{{dynatrace_activegate_install_string}}"
   # args:
   #   creates: "{{dynatrace_activegate_state}}"
-  when: ansible_system|lower == "linux" and dynatrace_activegate_function != 'synthetic' and dynatrace_activegate_function != 'zremote'
+  when: ansible_system|lower == "linux" and dynatrace_activegate_function != 'synthetic' and dynatrace_activegate_function != 'synthetic_http_only' and dynatrace_activegate_function != 'zremote'
 
 ## If installing synthetic activegate
 ###############################
