@@ -6,7 +6,7 @@
   when: not dynatrace_activegate_role_task or not dynatrace_environment_url or not dynatrace_paas_token
 
 - debug:
-    msg: "{{dynatrace_activegate_role_task}} {{dynatrace_activegate_function}} running on {{ansible_host}}. Hit Cntrl+C now to cancel if incorrect"
+    msg: "{{dynatrace_activegate_role_task}} {{dynatrace_activegate_function}} ActiveGate on {{ansible_host}}. Hit Cntrl+C now to cancel if incorrect"
 
 - name: "wait for 15 seconds"
   wait_for:
