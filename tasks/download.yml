@@ -20,6 +20,7 @@
     url: "{{dynatrace_activegate_installer_url}}"
     dest: "{{dynatrace_activegate_install_script}}"
     force: yes
+    timeout: 60
     headers:
       Authorization: "Api-Token {{dynatrace_paas_token}}"
   when: ansible_system|lower == "linux" and dynatrace_activegate_version == 'latest'
@@ -29,6 +30,7 @@
     url: "{{dynatrace_activegate_installer_url}}"
     dest: "{{dynatrace_activegate_install_script}}"
     force: yes
+    timeout: 60
     headers:
       Authorization: "Api-Token {{dynatrace_paas_token}}"
   when: ansible_system|lower == "linux" and dynatrace_activegate_version != 'latest' and not dynatrace_activegate_install_script_version_linux.stat.exists
@@ -38,6 +40,7 @@
     url: https://ca.dynatrace.com/dt-root.cert.pem
     dest: "{{dynatrace_activegate_dt_root_cert}}"
     force: yes
+    timeout: 60
   when: ansible_system|lower == "linux"
 
 - name: Verify installer signature
