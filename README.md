@@ -24,8 +24,8 @@ Role Variables
 
 `*`Mandatory
 
-| Parameter                           |  Variable                          | Variable Values   |
-| -------------                       |:-------------                      | :-----          |
+| Parameter                           |  Variable                          | Variable Values                                              |
+| :-----------------------------------|:-----------------------------------| :----------------------------------------------------------  |
 | Dynatrace Environment Url`*`        | `dynatrace_environment_url:`       | **Managed** `https://{your-domain}/e/{your-environment-id}`  |
 |                                     |                                    | **SaaS** `https://{your-environment-id}.live.dynatrace.com`  |
 | PaaS Token`*` (for downloading AG)  | `dynatrace_paas_token:`            | See documentation on creating [PaaS token](https://www.dynatrace.com/support/help/shortlink/kubernetes-applications) |
