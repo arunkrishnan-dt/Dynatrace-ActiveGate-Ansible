@@ -7,6 +7,11 @@
 
 - debug:
     msg: "{{dynatrace_activegate_role_task}} {{dynatrace_activegate_function}} ActiveGate on {{ansible_host}}. Hit Cntrl+C now to cancel if incorrect"
+  when: dynatrace_activegate_function == 'install'
+
+- debug:
+    msg: "{{dynatrace_activegate_role_task}} ActiveGate on {{ansible_host}}. Hit Cntrl+C now to cancel if incorrect"
+  when: dynatrace_activegate_function != 'install'
 
 - name: "wait for 15 seconds"
   wait_for:
