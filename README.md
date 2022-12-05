@@ -1,6 +1,8 @@
 Dynatrace-ActiveGate-Ansible
 ================
 
+> NOTE: Please visit https://github.com/dt-apac-services/Automation-Ansible-Dynatrace-ActiveGate for new updates
+
 Ansible role to install/update/rollback/uninstall ActiveGate on Linux
 
 Use this role to install following ActiveGate types:
